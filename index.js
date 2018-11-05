@@ -30,15 +30,19 @@ function tableify(items, options) {
     }
 
     cell += '>'
-    cell += header
-    cell += '</th>'
+
+    let content = header
+    if (safeGet(options, 'headerCellContent')) {
+      const customContent = options.headerCellContent(headers, header)
+      if (typeof customContent === 'string') content = customContent
+    }
+
+    cell += content + '</th>'
 
     return cell
   }).join('')
 
-
   html += headerHtml + '</tr></thead><tbody>'
-
 
   const tableBody = items.map(item => {
     const row = headers.map(header => {
@@ -54,8 +58,7 @@ function tableify(items, options) {
     return `<tr>${row}</tr>`
   }).join('')
 
-  html += tableBody
-  html += '</tbody></table>'
+  html += tableBody + '</tbody></table>'
 
   console.log(html)
   return html

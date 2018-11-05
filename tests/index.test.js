@@ -1,6 +1,7 @@
 const test = require('tape')
 const tableify = require('../index')
 const oneLine = require('oneline')
+const safeGet = require('just-safe-get')
 
 const items = [
   {
@@ -64,9 +65,9 @@ test('can create correct table with given headers and custom classes', function(
   <table>
     <thead>
       <tr>
-        <th>name</th>
+        <th>Product</th>
         <th>net</th>
-        <th class="green">vat_rate</th>
+        <th class="green">VAT</th>
       </tr>
     </thead>
     <tbody>
@@ -89,6 +90,20 @@ test('can create correct table with given headers and custom classes', function(
   </table>
 `.replace(/ /g, '')
 
+  const map = {
+    name: {
+      custom: null,
+      default: 'Product'
+    },
+    vat_rate: {
+      custom: 'VAT',
+      default: 'VAT Rate'
+    },
+    net: {
+      custom: null
+    }
+  }
+
   const options = {
     headers: ['name', 'net', 'vat_rate'],
     bodyCellClass: function(row, col) {
@@ -96,6 +111,11 @@ test('can create correct table with given headers and custom classes', function(
     },
     headerCellClass: function(row, col) {
       if (col === 'vat_rate') return 'green'
+    },
+    headerCellContent: function(row, col) {
+      if (map[col]) {
+        return map[col].custom || map[col].default
+      }
     }
   }
 
