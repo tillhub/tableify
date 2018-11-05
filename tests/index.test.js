@@ -66,7 +66,7 @@ test('can create correct table with given headers and custom classes', function(
       <tr>
         <th>name</th>
         <th>net</th>
-        <th>vat_rate</th>
+        <th class="green">vat_rate</th>
       </tr>
     </thead>
     <tbody>
@@ -93,6 +93,9 @@ test('can create correct table with given headers and custom classes', function(
     headers: ['name', 'net', 'vat_rate'],
     bodyCellClass: function(row, col) {
       if (col === 'name') return 'red'
+    },
+    headerCellClass: function(row, col) {
+      if (col === 'vat_rate') return 'green'
     }
   }
 
