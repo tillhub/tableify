@@ -61,7 +61,7 @@ test('can create correct table without given headers', function(t) {
     </table>
   `.replace(/>\s</gm, '><')
 
-  t.equal(tableify(items), expected, 'correct html')
+  t.equal(tableify(items), expected, 'correct html with default headers')
   t.end()
 })
 
@@ -135,6 +135,40 @@ test('can create correct table with given headers and custom options', function(
     }
   }
 
-  t.equal(tableify(items, options), expected, 'correct html')
+  t.equal(
+    tableify(items, options),
+    expected,
+    'custom headers and classes correct'
+  )
+  t.end()
+})
+
+test('can create correct table with no-header option', function(t) {
+  const expected = oneLine`
+    <table>
+      <tbody>
+        <tr>
+          <td>Lipstick</td>
+          <td>19</td>
+          <td>6.58</td>
+          <td>EUR</td>
+        </tr>
+        <tr>
+          <td>Shoelaces</td>
+          <td>19</td>
+          <td>7.34</td>
+          <td>EUR</td>
+        </tr>
+        <tr>
+          <td>Apple</td>
+          <td>7</td>
+          <td>0.43</td>
+          <td></td>
+        </tr>
+      </tbody>
+    </table>
+  `.replace(/>\s</gm, '><')
+
+  t.equal(tableify(items, { showHeaders: false }), expected, 'no header shown')
   t.end()
 })

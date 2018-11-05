@@ -3,7 +3,7 @@ const safeGet = require('just-safe-get')
 function tableify(items, options) {
   if (!items) return undefined
 
-  let html = '<table><thead><tr>'
+  let html = '<table>'
   let headers = []
 
   if (!safeGet(options, 'headers') || !Array.isArray(options.headers)) {
@@ -19,26 +19,30 @@ function tableify(items, options) {
     headers = JSON.parse(JSON.stringify(options.headers))
   }
 
-  const headerHtml = headers.map(header => {
-    let cell = '<th'
+  if (!options || !options.hasOwnProperty('showHeaders') || options.showHeaders) {
+    html += '<thead><tr>'
 
-    if (safeGet(options, 'headerCellClass')) {
-      const customClass = options.headerCellClass(headers, header)
-      if (typeof customClass === 'string') cell += ` class="${customClass}"`
-    }
+    const headerHtml = headers.map(header => {
+      let cell = '<th'
 
-    cell += '>'
+      if (safeGet(options, 'headerCellClass')) {
+        const customClass = options.headerCellClass(headers, header)
+        if (typeof customClass === 'string') cell += ` class="${customClass}"`
+      }
 
-    let content = header
-    if (safeGet(options, 'headerCellContent')) {
-      const customContent = options.headerCellContent(headers, header)
-      if (typeof customContent === 'string') content = customContent
-    }
+      cell += '>'
 
-    return cell + content + '</th>'
-  }).join('')
+      let content = header
+      if (safeGet(options, 'headerCellContent')) {
+        const customContent = options.headerCellContent(headers, header)
+        if (typeof customContent === 'string') content = customContent
+      }
 
-  html += headerHtml + '</tr></thead><tbody>'
+      return cell + content + '</th>'
+    }).join('')
+
+    html += headerHtml + '</tr></thead>'
+  }
 
   const tableBody = items.map(item => {
     const row = headers.map(header => {
@@ -62,7 +66,7 @@ function tableify(items, options) {
     return `<tr>${row}</tr>`
   }).join('')
 
-  html += tableBody + '</tbody></table>'
+  html += '<tbody>' + tableBody + '</tbody></table>'
 
   console.log(html)
   return html
