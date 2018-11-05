@@ -7,7 +7,7 @@ const tapSpec = require('tap-spec')
 
 process.env.NODE_ENV = 'test'
 
-pump(test.createStream(), tapSpec(), process.stdout, (err) => {
+pump(test.createStream(), tapSpec(), process.stdout, err => {
   if (err) return console.log(chalk.red(err))
 })
 
@@ -29,13 +29,13 @@ pump(test.createStream(), tapSpec(), process.stdout, (err) => {
 if (!process.argv.slice(2).length) {
   matchAndExecute('tests/*.test.js')
 } else {
-  process.argv.slice(2).forEach((pattern) => {
+  process.argv.slice(2).forEach(pattern => {
     matchAndExecute(pattern)
   })
 }
 
-function matchAndExecute (pattern) {
-  glob.sync(pattern, { cwd: process.cwd() }).forEach((file) => {
+function matchAndExecute(pattern) {
+  glob.sync(pattern, { cwd: process.cwd() }).forEach(file => {
     require(path.resolve(file))
   })
 }
