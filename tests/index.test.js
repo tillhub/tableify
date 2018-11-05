@@ -1,18 +1,19 @@
 const test = require('tape')
 const tableify = require('../index')
 const oneLine = require('oneline')
-const safeGet = require('just-safe-get')
 
 const items = [
   {
     name: 'Lipstick',
     vat_rate: 19,
-    net: 6.58
+    net: 6.58,
+    currency: 'EUR'
   },
   {
     name: 'Shoelaces',
     vat_rate: 19,
-    net: 7.34
+    net: 7.34,
+    currency: 'EUR'
   },
   {
     name: 'Apple',
@@ -34,6 +35,7 @@ test('can create correct table without given headers', function(t) {
           <th>name</th>
           <th>vat_rate</th>
           <th>net</th>
+          <th>currency</th>
         </tr>
       </thead>
       <tbody>
@@ -41,16 +43,19 @@ test('can create correct table without given headers', function(t) {
           <td>Lipstick</td>
           <td>19</td>
           <td>6.58</td>
+          <td>EUR</td>
         </tr>
         <tr>
           <td>Shoelaces</td>
           <td>19</td>
           <td>7.34</td>
+          <td>EUR</td>
         </tr>
         <tr>
           <td>Apple</td>
           <td>7</td>
           <td>0.43</td>
+          <td></td>
         </tr>
       </tbody>
     </table>
@@ -60,7 +65,7 @@ test('can create correct table without given headers', function(t) {
   t.end()
 })
 
-test('can create correct table with given headers and custom classes', function(t) {
+test('can create correct table with given headers and custom options', function(t) {
   const expected = oneLine`
   <table>
     <thead>
@@ -73,16 +78,16 @@ test('can create correct table with given headers and custom classes', function(
     <tbody>
       <tr>
         <td class="red">Lipstick</td>
-        <td>6.58</td>
+        <td>€6.58</td>
         <td>19</td>
       </tr>
       <tr>
         <td class="red">Shoelaces</td>
-        <td>7.34</td>
+        <td>€7.34</td>
         <td>19</td>
       </tr>
       <tr>
-        <td class="red">Apple</td>
+        <td class="apple">Apple</td>
         <td>0.43</td>
         <td>7</td>
       </tr>
@@ -106,15 +111,26 @@ test('can create correct table with given headers and custom classes', function(
 
   const options = {
     headers: ['name', 'net', 'vat_rate'],
-    bodyCellClass: function(row, col) {
-      if (col === 'name') return 'red'
-    },
     headerCellClass: function(row, col) {
       if (col === 'vat_rate') return 'green'
+    },
+    bodyCellClass: function(row, col, content) {
+      if (content === 'Apple') return 'apple'
+      if (col === 'name') return 'red'
     },
     headerCellContent: function(row, col) {
       if (map[col]) {
         return map[col].custom || map[col].default
+      }
+    },
+    bodyCellContent: function(row, col, content) {
+      if (row.currency) {
+        if (col === 'net') {
+          return content.toLocaleString('de-DE', {
+            style: 'currency',
+            currency: row.currency
+          })
+        }
       }
     }
   }

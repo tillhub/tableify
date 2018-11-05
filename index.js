@@ -19,8 +19,6 @@ function tableify(items, options) {
     headers = JSON.parse(JSON.stringify(options.headers))
   }
 
-  // console.log(headers)
-
   const headerHtml = headers.map(header => {
     let cell = '<th'
 
@@ -37,9 +35,7 @@ function tableify(items, options) {
       if (typeof customContent === 'string') content = customContent
     }
 
-    cell += content + '</th>'
-
-    return cell
+    return cell + content + '</th>'
   }).join('')
 
   html += headerHtml + '</tr></thead><tbody>'
@@ -49,11 +45,19 @@ function tableify(items, options) {
       let cell = '<td'
 
       if (safeGet(options, 'bodyCellClass')) {
-        const customClass = options.bodyCellClass(item, header)
+        const customClass = options.bodyCellClass(item, header, item[header])
         if (typeof customClass === 'string') cell += `class="${customClass}"`
       }
 
-      return cell + '>' + item[header] + '</td>'
+      cell += '>'
+
+      let content = item[header] || ''
+      if (safeGet(options, 'bodyCellContent')) {
+        const customContent = options.bodyCellContent(item, header, item[header])
+        if (typeof customContent === 'string') content = customContent
+      }
+
+      return cell + content + '</td>'
     }).join('')
     return `<tr>${row}</tr>`
   }).join('')
