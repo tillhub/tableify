@@ -19,6 +19,11 @@ const items = [
     name: 'Apple',
     vat_rate: 7,
     net: 0.43
+  },
+  {
+    name: 'Pears',
+    vat_rate: 7,
+    net: 0.77
   }
 ]
 
@@ -55,6 +60,12 @@ test('can create correct table without given headers', function(t) {
           <td>Apple</td>
           <td>7</td>
           <td>0.43</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>Pears</td>
+          <td>7</td>
+          <td>0.77</td>
           <td></td>
         </tr>
       </tbody>
@@ -137,6 +148,9 @@ test('can create correct table with given headers and custom options', function(
           })
         }
       }
+    },
+    hideRow: function(row) {
+      if (row.name === 'Pears') return true
     }
   }
 
@@ -168,6 +182,12 @@ test('can create correct table with no-header option', function(t) {
           <td>Apple</td>
           <td>7</td>
           <td>0.43</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>Pears</td>
+          <td>7</td>
+          <td>0.77</td>
           <td></td>
         </tr>
       </tbody>

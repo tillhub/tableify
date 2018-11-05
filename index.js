@@ -50,6 +50,8 @@ function tableify(items, options) {
   }
 
   const tableBody = items.map(item => {
+    if (safeGet(options, 'hideRow') && options.hideRow(item)) return '' // skip row
+
     const row = headers.map(header => {
       if (typeof header === 'object'
         && header.hasOwnProperty('show')
