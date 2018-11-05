@@ -23,10 +23,15 @@ function tableify(items, options) {
     html += '<thead><tr>'
 
     const headerHtml = headers.map(header => {
+      if (typeof header === 'object'
+        && header.hasOwnProperty('show')
+        && !header.show) return ''
+
       let cell = '<th'
+      const currentHeader = typeof header === 'object' ? header.field : header
 
       if (safeGet(options, 'headerCellClass')) {
-        const customClass = options.headerCellClass(headers, header)
+        const customClass = options.headerCellClass(headers, currentHeader)
         if (typeof customClass === 'string') cell += ` class="${customClass}"`
       }
 
@@ -34,7 +39,7 @@ function tableify(items, options) {
 
       let content = header
       if (safeGet(options, 'headerCellContent')) {
-        const customContent = options.headerCellContent(headers, header)
+        const customContent = options.headerCellContent(headers, currentHeader)
         if (typeof customContent === 'string') content = customContent
       }
 
@@ -46,18 +51,23 @@ function tableify(items, options) {
 
   const tableBody = items.map(item => {
     const row = headers.map(header => {
+      if (typeof header === 'object'
+        && header.hasOwnProperty('show')
+        && !header.show) return ''
+
       let cell = '<td'
+      const currentHeader = typeof header === 'object' ? header.field : header
 
       if (safeGet(options, 'bodyCellClass')) {
-        const customClass = options.bodyCellClass(item, header, item[header])
+        const customClass = options.bodyCellClass(item, currentHeader, item[currentHeader])
         if (typeof customClass === 'string') cell += ` class="${customClass}"`
       }
 
       cell += '>'
 
-      let content = item[header] || ''
+      let content = item[currentHeader] || ''
       if (safeGet(options, 'bodyCellContent')) {
-        const customContent = options.bodyCellContent(item, header, item[header])
+        const customContent = options.bodyCellContent(item, currentHeader, item[currentHeader])
         if (typeof customContent === 'string') content = customContent
       }
 

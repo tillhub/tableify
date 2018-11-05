@@ -110,7 +110,12 @@ test('can create correct table with given headers and custom options', function(
   }
 
   const options = {
-    headers: ['name', 'net', 'vat_rate'],
+    headers: [
+      'name',
+      'net',
+      { field: 'vat_rate', show: true },
+      { field: 'currency', show: false }
+    ],
     headerCellClass: function(row, col) {
       if (col === 'vat_rate') return 'green'
     },
