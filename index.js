@@ -24,7 +24,7 @@ function tableify(items, options) {
 
     if (safeGet(options, 'headerCellClass')) {
       const customClass = options.headerCellClass(headers, header)
-      if (typeof customClass === 'string') cell += `class="${customClass}"`
+      if (typeof customClass === 'string') cell += ` class="${customClass}"`
     }
 
     cell += '>'
@@ -46,7 +46,7 @@ function tableify(items, options) {
 
       if (safeGet(options, 'bodyCellClass')) {
         const customClass = options.bodyCellClass(item, header, item[header])
-        if (typeof customClass === 'string') cell += `class="${customClass}"`
+        if (typeof customClass === 'string') cell += ` class="${customClass}"`
       }
 
       cell += '>'

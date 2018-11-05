@@ -59,7 +59,7 @@ test('can create correct table without given headers', function(t) {
         </tr>
       </tbody>
     </table>
-  `.replace(/ /g, '')
+  `.replace(/>\s</gm, '><')
 
   t.equal(tableify(items), expected, 'correct html')
   t.end()
@@ -93,7 +93,7 @@ test('can create correct table with given headers and custom options', function(
       </tr>
     </tbody>
   </table>
-`.replace(/ /g, '')
+`.replace(/>\s</gm, '><')
 
   const map = {
     name: {
