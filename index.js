@@ -79,8 +79,6 @@ function tableify(items, options) {
   }).join('')
 
   html += '<tbody>' + tableBody + '</tbody></table>'
-
-  console.log(html)
   return html
 }
 

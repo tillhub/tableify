@@ -15,7 +15,7 @@
     "test": "tape tests/*.test.js",
     "tdd": "NODE_ENV=test DEBUG=api:* nodemon --exec nodemon tests/tdd-runner.js",
     "semantic-release": "semantic-release",
-    "precommit": "git add",
+    "precommit": "git add -A",
     "commit": "npm run precommit && git-cz",
     "lint": "eslint -c .eslintrc ."
   },
