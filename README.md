@@ -1,6 +1,6 @@
 # @tillhub/tableify
 
-> TBD
+Creates html table with customizable headers, classes and cell contents.
 
 [![NPM](https://img.shields.io/npm/v/@tillhub/tableify.svg)](https://www.npmjs.com/package/@tillhub/tableify) [![JavaScript Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](https://standardjs.com)
 
@@ -18,6 +18,8 @@ Tableify takes two arguments: items and options.
 |----------|------------------|-----------------------------------------------|----------|
 | items    | Array of objects | [{ name: 'a' }, { name: 'b' }, { name: 'c' }] | true     |
 | options  | Object           | { showHeaders: false }                        | false    |
+
+
 
 
 ```js
@@ -48,39 +50,39 @@ const items = [
   }
 ]
 
-  const options = {
-    headers: [
-      'name',
-      'net',
-      { field: 'vat_rate', show: true },
-      { field: 'currency', show: false }
-    ],
-    headerCellClass: function(row, col) {
-      if (col === 'vat_rate') return 'green'
-    },
-    bodyCellClass: function(row, col, content) {
-      if (content === 'Apple') return 'apple'
-      if (col === 'name') return 'red'
-    },
-    headerCellContent: function(row, col) {
-      if (map[col]) {
-        return map[col].custom || map[col].default
-      }
-    },
-    bodyCellContent: function(row, col, content) {
-      if (row.currency) {
-        if (col === 'net') {
-          return content.toLocaleString('de-DE', {
-            style: 'currency',
-            currency: row.currency
-          })
-        }
-      }
-    },
-    hideRow: function(row) {
-      if (row.name === 'Pears') return true
+const options = {
+  headers: [
+    'name',
+    'net',
+    { field: 'vat_rate', show: true },
+    { field: 'currency', show: false }
+  ],
+  headerCellClass: function(row, col) {
+    if (col === 'vat_rate') return 'green'
+  },
+  bodyCellClass: function(row, col, content) {
+    if (content === 'Apple') return 'apple'
+    if (col === 'name') return 'red'
+  },
+  headerCellContent: function(row, col) {
+    if (map[col]) {
+      return map[col].custom || map[col].default
     }
+  },
+  bodyCellContent: function(row, col, content) {
+    if (row.currency) {
+      if (col === 'net') {
+        return content.toLocaleString('de-DE', {
+          style: 'currency',
+          currency: row.currency
+        })
+      }
+    }
+  },
+  hideRow: function(row) {
+    if (row.name === 'Pears') return true
   }
+}
 
 console.log(tableify(items, options))
 
@@ -120,14 +122,15 @@ console.log(tableify(items, options))
 
 There are multiple alternatives for the options object.
 
-| Name              | Description                                                             | Type                               | Default |
-|-------------------|-------------------------------------------------------------------------|------------------------------------|---------|
-| headerCellClass   | function that returns custom class names for a cell in the table header | Function(row, col)/String          | --      |
-| bodyCellClass     | function that returns custom class names for a cell in the table body   | Function(row, col, content)/String | --      |
-| headerCellContent | function that returns custom content for a cell in table header         | Function(row, col)/String          | --      |
-| bodyCellContent   | function that returns custom content for a cell in table body           | Function(row, col, content)/String | --      |
-| hideRow           | function that returns a boolean; if true, it will skip the row          | Function(row)/Boolean              | --      |
-| showHeaders       | boolean that hides/shows the complete header section                    | Boolean                            | true    |
+| Name              | Description                                                                              | Type                               | Default                           |
+|-------------------|------------------------------------------------------------------------------------------|------------------------------------|-----------------------------------|
+| headers           | Array of strings with headers. If omitted, tableify will get all keys from item objects. | Array of strings                   | unique keys from all item objects |
+| headerCellClass   | function that returns custom class names for a cell in the table header                  | Function(row, col)/String          | --                                |
+| bodyCellClass     | function that returns custom class names for a cell in the table body                    | Function(row, col, content)/String | --                                |
+| headerCellContent | function that returns custom content for a cell in table header                          | Function(row, col)/String          | --                                |
+| bodyCellContent   | function that returns custom content for a cell in table body                            | Function(row, col, content)/String | --                                |
+| hideRow           | function that returns a boolean; if true, it will skip the row                           | Function(row)/Boolean              | --                                |
+| showHeaders       | boolean that hides/shows the complete header section                                     | Boolean                            | true                              |
 
 ## License
 
