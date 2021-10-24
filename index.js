@@ -1,12 +1,10 @@
-const safeGet = require('just-safe-get')
-
 function tableify(items, options) {
   if (!items) return undefined
 
   let html = '<table>'
   let headers = []
 
-  if (!safeGet(options, 'headers') || !Array.isArray(options.headers)) {
+  if (!Array.isArray(options?.headers)) {
     // get unique keys of all objects
     headers = new Set()
     items.forEach(item => {
@@ -38,7 +36,7 @@ function tableify(items, options) {
         let cell = '<th'
         const currentHeader = typeof header === 'object' ? header.field : header
 
-        if (safeGet(options, 'headerCellClass')) {
+        if (options?.headerCellClass) {
           const customClass = options.headerCellClass(headers, currentHeader)
           if (typeof customClass === 'string') cell += ` class="${customClass}"`
         }
@@ -46,7 +44,7 @@ function tableify(items, options) {
         cell += '>'
 
         let content = header
-        if (safeGet(options, 'headerCellContent')) {
+        if (options?.headerCellContent) {
           const customContent = options.headerCellContent(
             headers,
             currentHeader
@@ -63,7 +61,7 @@ function tableify(items, options) {
 
   const tableBody = items
     .map(item => {
-      if (safeGet(options, 'hideRow') && options.hideRow(item)) return '' // skip row
+      if (options?.hideRow?.(item)) return '' // skip row
 
       const row = headers
         .map(header => {
@@ -78,7 +76,7 @@ function tableify(items, options) {
           const currentHeader =
             typeof header === 'object' ? header.field : header
 
-          if (safeGet(options, 'bodyCellClass')) {
+          if (options?.bodyCellClass) {
             const customClass = options.bodyCellClass(
               item,
               currentHeader,
@@ -91,7 +89,7 @@ function tableify(items, options) {
           cell += '>'
 
           let content = item[currentHeader] || ''
-          if (safeGet(options, 'bodyCellContent')) {
+          if (options?.bodyCellContent) {
             const customContent = options.bodyCellContent(
               item,
               currentHeader,
